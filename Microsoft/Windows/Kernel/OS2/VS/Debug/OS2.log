@@ -1,0 +1,18 @@
+﻿  os_core.c
+C:\Users\ib701\Desktop\RTOS_M11102118_PA2_EDF\Micrium\Software\uCOS-II\Source\os_core.c(701,13): warning C4101: 'ptcb': 未參考的區域變數
+C:\Users\ib701\Desktop\RTOS_M11102118_PA2_EDF\Micrium\Software\uCOS-II\Source\os_core.c(951,20): warning C4013: 'malloc' 未定義; 假設 extern 傳回整數
+C:\Users\ib701\Desktop\RTOS_M11102118_PA2_EDF\Micrium\Software\uCOS-II\Source\os_core.c(951,47): warning C4047: '=': 'int *' 與 'int' 間接取值的層級不同
+C:\Users\ib701\Desktop\RTOS_M11102118_PA2_EDF\Micrium\Software\uCOS-II\Source\os_core.c(948,13): warning C4101: 'ptcb': 未參考的區域變數
+C:\Users\ib701\Desktop\RTOS_M11102118_PA2_EDF\Micrium\Software\uCOS-II\Source\os_core.c(1080,13): warning C4013: 'exit' 未定義; 假設 extern 傳回整數
+C:\Users\ib701\Desktop\RTOS_M11102118_PA2_EDF\Micrium\Software\uCOS-II\Source\os_core.c(2344,20): warning C4477: 'printf' : 格式字串 '%6x' 需要 'unsigned int' 類型的引數，但 variadic 引數 2 的類型為 'OS_TCB *'
+C:\Users\ib701\Desktop\RTOS_M11102118_PA2_EDF\Micrium\Software\uCOS-II\Source\os_core.c(2348,20): warning C4477: 'printf' : 格式字串 '%6x' 需要 'unsigned int' 類型的引數，但 variadic 引數 2 的類型為 'OS_TCB *'
+C:\Users\ib701\Desktop\RTOS_M11102118_PA2_EDF\Micrium\Software\uCOS-II\Source\os_core.c(2351,16): warning C4477: 'printf' : 格式字串 '%6x' 需要 'unsigned int' 類型的引數，但 variadic 引數 1 的類型為 'os_tcb *'
+C:\Users\ib701\Desktop\RTOS_M11102118_PA2_EDF\Micrium\Software\uCOS-II\Source\os_core.c(2352,16): warning C4477: 'printf' : 格式字串 '%6x' 需要 'unsigned int' 類型的引數，但 variadic 引數 1 的類型為 'OS_TCB *'
+C:\Users\ib701\Desktop\RTOS_M11102118_PA2_EDF\Micrium\Software\uCOS-II\Source\os_core.c(2353,16): warning C4477: 'printf' : 格式字串 '%6x' 需要 'unsigned int' 類型的引數，但 variadic 引數 1 的類型為 'os_tcb *'
+C:\Users\ib701\Desktop\RTOS_M11102118_PA2_EDF\Micrium\Software\uCOS-II\Source\os_core.c(2364,28): warning C4477: 'printf' : 格式字串 '%6x' 需要 'unsigned int' 類型的引數，但 variadic 引數 2 的類型為 'os_tcb *'
+C:\Users\ib701\Desktop\RTOS_M11102118_PA2_EDF\Micrium\Software\uCOS-II\Source\os_core.c(2364,28): warning C4477: 'printf' : 格式字串 '%6x' 需要 'unsigned int' 類型的引數，但 variadic 引數 3 的類型為 'OS_TCB *'
+C:\Users\ib701\Desktop\RTOS_M11102118_PA2_EDF\Micrium\Software\uCOS-II\Source\os_core.c(2364,28): warning C4477: 'printf' : 格式字串 '%6x' 需要 'unsigned int' 類型的引數，但 variadic 引數 4 的類型為 'os_tcb *'
+C:\Users\ib701\Desktop\RTOS_M11102118_PA2_EDF\Micrium\Software\uCOS-II\Source\os_core.c(2366,28): warning C4477: 'printf' : 格式字串 '%6x' 需要 'unsigned int' 類型的引數，但 variadic 引數 2 的類型為 'os_tcb *'
+C:\Users\ib701\Desktop\RTOS_M11102118_PA2_EDF\Micrium\Software\uCOS-II\Source\os_core.c(2366,28): warning C4477: 'printf' : 格式字串 '%6x' 需要 'unsigned int' 類型的引數，但 variadic 引數 3 的類型為 'OS_TCB *'
+C:\Users\ib701\Desktop\RTOS_M11102118_PA2_EDF\Micrium\Software\uCOS-II\Source\os_core.c(2366,28): warning C4477: 'printf' : 格式字串 '%6x' 需要 'unsigned int' 類型的引數，但 variadic 引數 4 的類型為 'os_tcb *'
+  OS2.vcxproj -> C:\Users\ib701\Desktop\RTOS_M11102118_PA2_EDF\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe

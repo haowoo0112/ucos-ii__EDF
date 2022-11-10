@@ -945,7 +945,32 @@ void  OSSchedUnlock (void)
 
 void  OSStart (void)
 {
+    OS_TCB* ptcb;
+    int i = 0, min = 99, j = 0, min_index;
+    int* finish;
+    finish = malloc(TASK_NUMBER * sizeof(int));
+
     if (OSRunning == OS_FALSE) {
+        for (i = 0; i < TASK_NUMBER; i++) {
+            finish[i] = OSTCBPrioTbl[i]->OSTCBExtPtr->finish_time;
+        }
+
+        for (i = 0; i < TASK_NUMBER; i++) {
+            min = 99;
+            for (j = 0; j < TASK_NUMBER; j++) {
+                if (finish[j] < min) {
+                    min = finish[j];
+                    min_index = j;
+                }
+            }
+            finish[min_index] = 99;
+            if (i != min_index) {
+                OSTaskChangePrio(i, TASK_NUMBER);
+                OSTaskChangePrio(min_index, i);
+                OSTaskChangePrio(TASK_NUMBER, min_index);
+            }
+        }
+        
         OS_SchedNew();                               /* Find highest priority's task priority number   */
         OSPrioCur     = OSPrioHighRdy;
         OSTCBHighRdy  = OSTCBPrioTbl[OSPrioHighRdy]; /* Point to highest priority task ready to run    */
@@ -2299,16 +2324,20 @@ INT8U  OS_TCBInit (INT8U    prio,
             OSRdyTbl[ptcb->OSTCBY] |= ptcb->OSTCBBitX;
             OS_TRACE_TASK_READY(ptcb);
         }
+        if (ptcb->OSTCBId != OS_TASK_IDLE_ID) {
+            ptcb->OSTCBExtPtr->TaskNumber = 0;
+            ptcb->OSTCBExtPtr->finish_time = 0;
+        }
         if (ptcb->OSTCBId != OS_TASK_IDLE_ID && ptcb->OSTCBExtPtr->TaskArriveTime == 0 ) {
             OSRdyGrp |= ptcb->OSTCBBitY;         /* Make task ready to run                   */
             OSRdyTbl[ptcb->OSTCBY] |= ptcb->OSTCBBitX;
             ptcb->OSTCBExtPtr->start_time = OSTimeGet();
+            ptcb->OSTCBExtPtr->finish_time = OSTimeGet() + ptcb->OSTCBExtPtr->TaskPeriodic;
             ptcb->OSTCBExtPtr->count = 0;
             OS_TRACE_TASK_READY(ptcb);
         }
         OSTaskCtr++;                                       /* Increment the #tasks counter             */
-        if (ptcb->OSTCBId != OS_TASK_IDLE_ID)
-            ptcb->OSTCBExtPtr->TaskNumber = 0;
+        
 
         //PA1 part1
         if (ptcb->OSTCBId != OS_TASK_IDLE_ID) {
