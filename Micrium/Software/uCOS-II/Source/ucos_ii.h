@@ -92,7 +92,7 @@ typedef struct task_para_set {
     INT16U arrive_time;
     INT16U start_time;
     INT16U completion_time;
-    INT16U end_time;
+    INT16U deadline_time;
 } task_para_set;
 
 int TASK_NUMBER;    //Number of the input tasks
