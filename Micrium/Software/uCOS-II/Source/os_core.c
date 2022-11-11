@@ -742,7 +742,7 @@ void  OSIntExit (void)
                                 OSTCBHighRdy->OSTCBId, OSTCBHighRdy->OSTCBExtPtr->TaskNumber,
                                 OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time,
                                 OSTCBCur->OSTCBCtxSwCtr,
-                                OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime,
+                                OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->start_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime,
                                 OSTCBCur->OSTCBDly
                             );
                             if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0)
@@ -753,7 +753,7 @@ void  OSIntExit (void)
                                     OSTCBHighRdy->OSTCBId, OSTCBHighRdy->OSTCBExtPtr->TaskNumber,
                                     OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time,
                                     OSTCBCur->OSTCBCtxSwCtr,
-                                    OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime,
+                                    OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->start_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime,
                                     OSTCBCur->OSTCBDly);
                                 fclose(Output_fp);
                             }
@@ -765,7 +765,7 @@ void  OSIntExit (void)
                                 OSTCBHighRdy->OSTCBPrio, 
                                 OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time,
                                 OSTCBCur->OSTCBCtxSwCtr,
-                                OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime,
+                                OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->start_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime,
                                 OSTCBCur->OSTCBDly
                             );
                             if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0)
@@ -776,7 +776,7 @@ void  OSIntExit (void)
                                     OSTCBHighRdy->OSTCBPrio,
                                     OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time,
                                     OSTCBCur->OSTCBCtxSwCtr,
-                                    OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime,
+                                    OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->start_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime,
                                     OSTCBCur->OSTCBDly);
                                 fclose(Output_fp);
                             }
@@ -979,6 +979,7 @@ void  OSStart (void)
         OSPrioCur     = OSPrioHighRdy;
         OSTCBHighRdy  = OSTCBPrioTbl[OSPrioHighRdy]; /* Point to highest priority task ready to run    */
         OSTCBCur      = OSTCBHighRdy;
+        OSTCBCur->OSTCBExtPtr->start_time = OSTimeGet();
         printf("Tick\tEvent\t       CurrentTask ID\t NextTask ID    ResponseTime  #of ContextSwitch\t PreemptionTime\t OSTimeDly\n");
         
         OSStartHighRdy();                            /* Execute target specific code to start task     */
@@ -1153,14 +1154,12 @@ void  OSTimeTick (void)
             }
             
             if (i != min_index) {
-                //printf("%d %d %d %d %d %d\n", i, min_index, OSTCBPrioTbl[i]->OSTCBId, OSTCBPrioTbl[min_index]->OSTCBId, OSTCBPrioTbl[i]->OSTCBExtPtr->end_time, OSTCBPrioTbl[min_index]->OSTCBExtPtr->end_time);
                 OSTaskChangePrio(i, TASK_NUMBER);
                 OSTaskChangePrio(min_index, i);
                 OSTaskChangePrio(TASK_NUMBER, min_index);
                 temp = finish[i];
                 finish[i] = finish[min_index];
                 finish[min_index] = temp;
-                //printf("%d %d %d %d %d %d\n", i, min_index, OSTCBPrioTbl[i]->OSTCBId, OSTCBPrioTbl[min_index]->OSTCBId, OSTCBPrioTbl[i]->OSTCBExtPtr->end_time, OSTCBPrioTbl[min_index]->OSTCBExtPtr->end_time);
             }
         }
         OS_EXIT_CRITICAL();
@@ -1168,6 +1167,8 @@ void  OSTimeTick (void)
         INT8U      y;
         if (OSTCBCur->OSTCBPrio != OS_TASK_IDLE_PRIO) {
             if (OSTCBCur->OSTCBExtPtr->count < OSTCBCur->OSTCBExtPtr->TaskExecutionTime-1) {
+                if(OSTCBCur->OSTCBExtPtr->count == 0)
+                    OSTCBCur->OSTCBExtPtr->start_time = OSTimeGet()-1;
                 OSTCBCur->OSTCBExtPtr->count = (OSTCBCur->OSTCBExtPtr->count) + 1;
             }
             else {
@@ -1184,13 +1185,15 @@ void  OSTimeTick (void)
                     OS_Sched();
                 }
                 else {
+                    OSTCBCur->OSTCBExtPtr->completion_time = OSTimeGet();
+                    printf("%d %d %d\n", OSTCBCur->OSTCBExtPtr->completion_time, OSTCBCur->OSTCBExtPtr->start_time, OSTCBCur->OSTCBExtPtr->TaskExecutionTime);
                     printf("%2d\tCompletion\t task(%2d)(%2d)\t task(%2d)(%2d)\t      %2d\t     %2d\t\t    %2d\n",
                         OSTimeGet(),
                         OSTCBCur->OSTCBId, OSTCBCur->OSTCBExtPtr->TaskNumber,
                         OSTCBHighRdy->OSTCBId, OSTCBHighRdy->OSTCBExtPtr->TaskNumber+1,
                         OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time,
                         OSTCBCur->OSTCBCtxSwCtr,
-                        OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime
+                        OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->start_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime
                     );
                     if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0)
                     {
@@ -1200,7 +1203,7 @@ void  OSTimeTick (void)
                             OSTCBHighRdy->OSTCBId, OSTCBHighRdy->OSTCBExtPtr->TaskNumber + 1,
                             OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time,
                             OSTCBCur->OSTCBCtxSwCtr,
-                            OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime);
+                            OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->start_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime);
                         fclose(Output_fp);
                     }
                     OSTCBCur->OSTCBExtPtr->count = 0;
@@ -2373,37 +2376,7 @@ INT8U  OS_TCBInit (INT8U    prio,
             OS_TRACE_TASK_READY(ptcb);
         }
         OSTaskCtr++;                                       /* Increment the #tasks counter             */
-        
 
-        //PA1 part1
-        if (ptcb->OSTCBId != OS_TASK_IDLE_ID) {
-            printf("Task[%2d] created, TCB Address\t%6x\n", ptcb->OSTCBId, ptcb);
-            printf("------After TCB[%2d] being linked------\n", OSTCBList->OSTCBId);
-        }
-        else {
-            printf("Task[%2d] created, TCB Address\t%6x\n", 63, ptcb);
-            printf("------After TCB[%2d] being linked------\n", 63);
-        }
-        printf("Previous TCB point to address\t%6x\n", OSTCBList->OSTCBPrev);
-        printf("Current\t TCB point to address\t%6x\n", OSTCBList);
-        printf("Next\t TCB point to address\t%6x\n", OSTCBList->OSTCBNext);
-        
-        printf("\n");
-
-
-        if (OSTaskCtr == TASK_NUMBER + 1 && ptcb->OSTCBId != OS_TASK_IDLE_ID) {
-            printf("================TCB linked list================\n");
-            printf("Task\tPrev_TCB_addr\tTCB_addr   Next_TCB_addr\n");
-            ptcb = OSTCBList;
-            while (ptcb != (OS_TCB*)0) {
-                if (ptcb->OSTCBId != OS_TASK_IDLE_ID)
-                    printf("%2d\t     %6x\t  %6x\t%6x\n", ptcb->OSTCBId, ptcb->OSTCBPrev, ptcb, ptcb->OSTCBNext);
-                else
-                    printf("%2d\t     %6x\t  %6x\t%6x\n", 63, ptcb->OSTCBPrev, ptcb, ptcb->OSTCBNext);
-                ptcb = ptcb->OSTCBNext;
-            }
-            printf("\n");
-        }
         
         OS_EXIT_CRITICAL();
         return (OS_ERR_NONE);
