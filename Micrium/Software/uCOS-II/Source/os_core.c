@@ -734,14 +734,15 @@ void  OSIntExit (void)
                         }
                     }
                     if(OSTCBCur->OSTCBDly != 0) {
+                        OSTCBCur->OSTCBExtPtr->completion_time = OSTimeGet();
                         if (OSTCBHighRdy->OSTCBPrio != OS_TASK_IDLE_PRIO ) {
                             printf("%2d\tCompletion\t task(%2d)(%2d)\t task(%2d)(%2d)\t      %2d\t     %2d\t\t    %2d\t\t   %2d\n",
                                 OSTimeGet(),
                                 OSTCBCur->OSTCBId, OSTCBCur->OSTCBExtPtr->TaskNumber,
                                 OSTCBHighRdy->OSTCBId, OSTCBHighRdy->OSTCBExtPtr->TaskNumber,
-                                OSTimeGet() - OSTCBCur->OSTCBExtPtr->arrive_time,
+                                OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time,
                                 OSTCBCur->OSTCBCtxSwCtr,
-                                OSTimeGet() - OSTCBCur->OSTCBExtPtr->arrive_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime,
+                                OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime,
                                 OSTCBCur->OSTCBDly
                             );
                             if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0)
@@ -750,9 +751,9 @@ void  OSIntExit (void)
                                     OSTimeGet(),
                                     OSTCBCur->OSTCBId, OSTCBCur->OSTCBExtPtr->TaskNumber,
                                     OSTCBHighRdy->OSTCBId, OSTCBHighRdy->OSTCBExtPtr->TaskNumber,
-                                    OSTimeGet() - OSTCBCur->OSTCBExtPtr->arrive_time,
+                                    OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time,
                                     OSTCBCur->OSTCBCtxSwCtr,
-                                    OSTimeGet() - OSTCBCur->OSTCBExtPtr->arrive_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime,
+                                    OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime,
                                     OSTCBCur->OSTCBDly);
                                 fclose(Output_fp);
                             }
@@ -762,9 +763,9 @@ void  OSIntExit (void)
                                 OSTimeGet(),
                                 OSTCBCur->OSTCBId, OSTCBCur->OSTCBExtPtr->TaskNumber,
                                 OSTCBHighRdy->OSTCBPrio, 
-                                OSTimeGet() - OSTCBCur->OSTCBExtPtr->arrive_time,
+                                OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time,
                                 OSTCBCur->OSTCBCtxSwCtr,
-                                OSTimeGet() - OSTCBCur->OSTCBExtPtr->arrive_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime,
+                                OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime,
                                 OSTCBCur->OSTCBDly
                             );
                             if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0)
@@ -773,9 +774,9 @@ void  OSIntExit (void)
                                     OSTimeGet(),
                                     OSTCBCur->OSTCBId, OSTCBCur->OSTCBExtPtr->TaskNumber,
                                     OSTCBHighRdy->OSTCBPrio,
-                                    OSTimeGet() - OSTCBCur->OSTCBExtPtr->arrive_time,
+                                    OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time,
                                     OSTCBCur->OSTCBCtxSwCtr,
-                                    OSTimeGet() - OSTCBCur->OSTCBExtPtr->arrive_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime,
+                                    OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime,
                                     OSTCBCur->OSTCBDly);
                                 fclose(Output_fp);
                             }
@@ -1170,16 +1171,16 @@ void  OSTimeTick (void)
                 OSTCBCur->OSTCBExtPtr->count = (OSTCBCur->OSTCBExtPtr->count) + 1;
             }
             else {
-                OSTCBCur->OSTCBExtPtr->finish_time = OSTimeGet();
-                if ((OSTCBCur->OSTCBExtPtr->TaskPeriodic) - (OSTCBCur->OSTCBExtPtr->finish_time - OSTCBCur->OSTCBExtPtr->arrive_time) > 0) {
-                    OSTCBCur->OSTCBDly = (OSTCBCur->OSTCBExtPtr->TaskPeriodic) - (OSTCBCur->OSTCBExtPtr->finish_time - OSTCBCur->OSTCBExtPtr->arrive_time);
+                OSTCBCur->OSTCBExtPtr->completion_time = OSTimeGet();
+                if ((OSTCBCur->OSTCBExtPtr->TaskPeriodic) - (OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time) > 0) {
+                    OSTCBCur->OSTCBDly = (OSTCBCur->OSTCBExtPtr->TaskPeriodic) - (OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time);
                     y = OSTCBCur->OSTCBY;
                     OSRdyTbl[y] &= (OS_PRIO)~OSTCBCur->OSTCBBitX;
                     OS_TRACE_TASK_SUSPENDED(OSTCBCur);
                     if (OSRdyTbl[y] == 0u) {
                         OSRdyGrp &= (OS_PRIO)~OSTCBCur->OSTCBBitY;
                     }
-                    OS_TRACE_TASK_DLY((OSTCBCur->OSTCBExtPtr->TaskPeriodic) - (OSTCBCur->OSTCBExtPtr->finish_time - OSTCBCur->OSTCBExtPtr->arrive_time));
+                    OS_TRACE_TASK_DLY((OSTCBCur->OSTCBExtPtr->TaskPeriodic) - (OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time));
                     OS_Sched();
                 }
                 else {
@@ -1187,9 +1188,9 @@ void  OSTimeTick (void)
                         OSTimeGet(),
                         OSTCBCur->OSTCBId, OSTCBCur->OSTCBExtPtr->TaskNumber,
                         OSTCBHighRdy->OSTCBId, OSTCBHighRdy->OSTCBExtPtr->TaskNumber+1,
-                        OSTimeGet() - OSTCBCur->OSTCBExtPtr->arrive_time,
+                        OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time,
                         OSTCBCur->OSTCBCtxSwCtr,
-                        OSTimeGet() - OSTCBCur->OSTCBExtPtr->arrive_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime
+                        OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime
                     );
                     if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0)
                     {
@@ -1197,9 +1198,9 @@ void  OSTimeTick (void)
                             OSTimeGet(),
                             OSTCBCur->OSTCBId, OSTCBCur->OSTCBExtPtr->TaskNumber,
                             OSTCBHighRdy->OSTCBId, OSTCBHighRdy->OSTCBExtPtr->TaskNumber + 1,
-                            OSTimeGet() - OSTCBCur->OSTCBExtPtr->arrive_time,
+                            OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time,
                             OSTCBCur->OSTCBCtxSwCtr,
-                            OSTimeGet() - OSTCBCur->OSTCBExtPtr->arrive_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime);
+                            OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime);
                         fclose(Output_fp);
                     }
                     OSTCBCur->OSTCBExtPtr->count = 0;
