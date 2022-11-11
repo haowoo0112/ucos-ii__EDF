@@ -89,6 +89,7 @@ typedef struct task_para_set {
     INT16U TaskNumber;
     INT16U TaskPriority;
     INT16U count;
+    INT16U arrive_time;
     INT16U start_time;
     INT16U finish_time;
     INT16U end_time;
