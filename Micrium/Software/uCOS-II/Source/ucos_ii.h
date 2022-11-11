@@ -65,7 +65,7 @@ extern "C" {
 
 
 /*End time for the simulation*/
-#define SYSTEM_END_TIME 30
+#define SYSTEM_END_TIME 40
 
 /*Input file*/
 FILE* fp;
@@ -91,6 +91,7 @@ typedef struct task_para_set {
     INT16U count;
     INT16U start_time;
     INT16U finish_time;
+    INT16U end_time;
 } task_para_set;
 
 int TASK_NUMBER;    //Number of the input tasks
