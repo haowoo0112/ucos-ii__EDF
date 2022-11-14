@@ -1004,30 +1004,22 @@ void  OSSchedUnlock (void)
 void  OSStart (void)
 {
     int i = 0, min = 99, j = 0, min_index, temp;
-    int* finish;
-    finish = malloc(TASK_NUMBER * sizeof(int));
 
     if (OSRunning == OS_FALSE) {
-        for (i = 0; i < TASK_NUMBER; i++) {
-            finish[i] = OSTCBPrioTbl[i]->OSTCBExtPtr->deadline_time;
-        }
         
         for (i = 0; i < TASK_NUMBER; i++) {
             min = 99;
             for (j = i; j < TASK_NUMBER; j++) {
-                if (finish[j] < min) {
-                    min = finish[j];
+                if (OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time < min && OSTCBPrioTbl[i]->OSTCBExtPtr->deadline_time>OSTimeGet()) {
+                    min = OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time;
                     min_index = j;
                 }
             }
-            //finish[min_index] = 99;
+
             if (i != min_index) {
                 OSTaskChangePrio(i, TASK_NUMBER);
                 OSTaskChangePrio(min_index, i);
                 OSTaskChangePrio(TASK_NUMBER, min_index);
-                temp = finish[i];
-                finish[i] = finish[min_index];
-                finish[min_index] = temp;
             }
         }
 
@@ -1194,17 +1186,13 @@ void  OSTimeTick (void)
             OS_EXIT_CRITICAL();
         }
         int i = 0, min = 99, j = 0, min_index = 0, temp;
-        int* finish;
-        finish = malloc(TASK_NUMBER * sizeof(int));
-        for (i = 0; i < TASK_NUMBER; i++) {
-            finish[i] = OSTCBPrioTbl[i]->OSTCBExtPtr->deadline_time;
-        }
+
         OS_ENTER_CRITICAL();
         for (i = 0; i < TASK_NUMBER; i++) {
             min = 99;
             for (j = i; j < TASK_NUMBER; j++) {
-                if (finish[j] < min && finish[j]>OSTimeGet()) {
-                    min = finish[j];
+                if (OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time < min && OSTCBPrioTbl[i]->OSTCBExtPtr->deadline_time>OSTimeGet()) {
+                    min = OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time;
                     min_index = j;
                 }
             }
@@ -1213,17 +1201,14 @@ void  OSTimeTick (void)
                 OSTaskChangePrio(i, TASK_NUMBER);
                 OSTaskChangePrio(min_index, i);
                 OSTaskChangePrio(TASK_NUMBER, min_index);
-                temp = finish[i];
-                finish[i] = finish[min_index];
-                finish[min_index] = temp;
             }
         }
         OS_EXIT_CRITICAL();
-
+        /*
         for (i = 0; i < TASK_NUMBER; i++) {
             printf("%d %d\n",OSTCBPrioTbl[i]->OSTCBId, OSTCBPrioTbl[i]->OSTCBExtPtr->deadline_time);
         }
-        printf("\n");
+        printf("\n");*/
         
         INT8U      y;
         if (OSTCBCur->OSTCBPrio != OS_TASK_IDLE_PRIO) {
