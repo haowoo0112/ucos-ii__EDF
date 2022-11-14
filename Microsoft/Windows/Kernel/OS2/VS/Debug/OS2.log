@@ -1,8 +1,1 @@
-﻿  os_core.c
-C:\Users\ib701\Desktop\RTOS_M11102118_PA2_EDF\Micrium\Software\uCOS-II\Source\os_core.c(701,13): warning C4101: 'ptcb': 未參考的區域變數
-C:\Users\ib701\Desktop\RTOS_M11102118_PA2_EDF\Micrium\Software\uCOS-II\Source\os_core.c(952,20): warning C4013: 'malloc' 未定義; 假設 extern 傳回整數
-C:\Users\ib701\Desktop\RTOS_M11102118_PA2_EDF\Micrium\Software\uCOS-II\Source\os_core.c(952,47): warning C4047: '=': 'int *' 與 'int' 間接取值的層級不同
-C:\Users\ib701\Desktop\RTOS_M11102118_PA2_EDF\Micrium\Software\uCOS-II\Source\os_core.c(1086,13): warning C4013: 'exit' 未定義; 假設 extern 傳回整數
-C:\Users\ib701\Desktop\RTOS_M11102118_PA2_EDF\Micrium\Software\uCOS-II\Source\os_core.c(1142,51): warning C4047: '=': 'int *' 與 'int' 間接取值的層級不同
-C:\Users\ib701\Desktop\RTOS_M11102118_PA2_EDF\Micrium\Software\uCOS-II\Source\os_core.c(1150,49): warning C4018: '>': signed/unsigned 不相符
-  OS2.vcxproj -> C:\Users\ib701\Desktop\RTOS_M11102118_PA2_EDF\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe
+﻿  OS2.vcxproj -> C:\Users\ib701\Desktop\RTOS_M11102118_PA2_EDF\Microsoft\Windows\Kernel\OS2\VS\Debug\OS2.exe
