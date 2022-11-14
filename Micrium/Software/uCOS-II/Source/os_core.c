@@ -1010,7 +1010,7 @@ void  OSStart (void)
         for (i = 0; i < TASK_NUMBER; i++) {
             min = 99;
             for (j = i; j < TASK_NUMBER; j++) {
-                if (OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time < min && OSTCBPrioTbl[i]->OSTCBExtPtr->deadline_time>OSTimeGet()) {
+                if (OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time < min && OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time>OSTimeGet()) {
                     min = OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time;
                     min_index = j;
                 }
@@ -1185,15 +1185,17 @@ void  OSTimeTick (void)
             ptcb = ptcb->OSTCBNext;                        /* Point at next TCB in TCB list                */
             OS_EXIT_CRITICAL();
         }
-        int i = 0, min = 99, j = 0, min_index = 0, temp;
+        int i = 0, min = 99, j = 0, min_index = 0, temp, min_ID = 99;
 
         OS_ENTER_CRITICAL();
         for (i = 0; i < TASK_NUMBER; i++) {
             min = 99;
+            min_ID = 99;
             for (j = i; j < TASK_NUMBER; j++) {
-                if (OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time < min && OSTCBPrioTbl[i]->OSTCBExtPtr->deadline_time>OSTimeGet()) {
+                if (OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time <= min && OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time>OSTimeGet() && OSTCBPrioTbl[j]->OSTCBId<min_ID) {
                     min = OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time;
                     min_index = j;
+                    min_ID = OSTCBPrioTbl[j]->OSTCBId;
                 }
             }
             
