@@ -1011,7 +1011,7 @@ void  OSStart (void)
             min = 99;
             min_ID = 99;
             for (j = i; j < TASK_NUMBER; j++) {
-                if (OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time <= min && OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time > OSTimeGet()) {
+                if (OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time < min && OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time > OSTimeGet()) {
                     min = OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time;
                     min_index = j;
                     min_ID = OSTCBPrioTbl[j]->OSTCBId;
@@ -1199,7 +1199,7 @@ void  OSTimeTick (void)
             min = 99;
             min_ID = 99;
             for (j = i; j < TASK_NUMBER; j++) {
-                if (OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time <= min && OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time > OSTimeGet()) {
+                if (OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time < min && OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time > OSTimeGet()) {
                     min = OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time;
                     min_index = j;
                     min_ID = OSTCBPrioTbl[j]->OSTCBId;
