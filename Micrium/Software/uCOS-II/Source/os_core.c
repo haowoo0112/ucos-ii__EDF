@@ -1003,16 +1003,23 @@ void  OSSchedUnlock (void)
 
 void  OSStart (void)
 {
-    int i = 0, min = 99, j = 0, min_index, temp;
+    int i = 0, min = 99, j = 0, min_index, temp, min_ID;
 
     if (OSRunning == OS_FALSE) {
         
         for (i = 0; i < TASK_NUMBER; i++) {
             min = 99;
+            min_ID = 99;
             for (j = i; j < TASK_NUMBER; j++) {
-                if (OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time < min && OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time>OSTimeGet()) {
+                if (OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time <= min && OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time > OSTimeGet()) {
                     min = OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time;
                     min_index = j;
+                    min_ID = OSTCBPrioTbl[j]->OSTCBId;
+                }
+                if (OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time == min && OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time > OSTimeGet() && OSTCBPrioTbl[j]->OSTCBId < min_ID) {
+                    min = OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time;
+                    min_index = j;
+                    min_ID = OSTCBPrioTbl[j]->OSTCBId;
                 }
             }
 
@@ -1192,7 +1199,12 @@ void  OSTimeTick (void)
             min = 99;
             min_ID = 99;
             for (j = i; j < TASK_NUMBER; j++) {
-                if (OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time <= min && OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time>OSTimeGet() && OSTCBPrioTbl[j]->OSTCBId<min_ID) {
+                if (OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time <= min && OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time > OSTimeGet()) {
+                    min = OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time;
+                    min_index = j;
+                    min_ID = OSTCBPrioTbl[j]->OSTCBId;
+                }
+                if (OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time == min && OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time > OSTimeGet() && OSTCBPrioTbl[j]->OSTCBId < min_ID) {
                     min = OSTCBPrioTbl[j]->OSTCBExtPtr->deadline_time;
                     min_index = j;
                     min_ID = OSTCBPrioTbl[j]->OSTCBId;
