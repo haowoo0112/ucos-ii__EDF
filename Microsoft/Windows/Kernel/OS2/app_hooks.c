@@ -130,7 +130,7 @@ void InputFile() {
             /*printf("Info: %d\n", task_inf[i]);*/
             if (i == 0) {
                 TASK_NUMBER++;
-                TaskParameter[j].TaskID = TASK_NUMBER;
+                TaskParameter[j].TaskID = TaskInfo[i];
             }
             else if (i == 1)
                 TaskParameter[j].TaskArriveTime = TaskInfo[i];

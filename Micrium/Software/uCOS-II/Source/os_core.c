@@ -789,48 +789,45 @@ void  OSIntExit (void)
                     if (OSTCBCur->OSTCBPrio != OS_TASK_IDLE_PRIO && OSTCBCur->OSTCBExtPtr->count == OSTCBCur->OSTCBExtPtr->TaskExecutionTime && OSTCBCur->OSTCBDly == 0) {
                         OSTCBCur->OSTCBExtPtr->completion_time = OSTimeGet();
                         if (OSTCBHighRdy->OSTCBPrio != OS_TASK_IDLE_PRIO) {
-                            printf("%2d\tCompletion\t task(%2d)(%2d)\t task(%2d)(%2d)\t      %2d\t     %2d\t\t    %2d\t\t   %2d\n",
+                            printf("%2d\tCompletion\t task(%2d)(%2d)\t task(%2d)(%2d)\t      %2d\t     %2d\t\t    %2d\n",
                                 OSTimeGet(),
                                 OSTCBCur->OSTCBId, OSTCBCur->OSTCBExtPtr->TaskNumber,
                                 OSTCBHighRdy->OSTCBId, OSTCBHighRdy->OSTCBExtPtr->TaskNumber,
                                 OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time,
                                 OSTCBCur->OSTCBCtxSwCtr,
-                                OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->start_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime,
-                                OSTCBCur->OSTCBDly
+                                OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->start_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime
                             );
                             if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0)
                             {
-                                fprintf(Output_fp, "%2d\tCompletion\t task(%2d)(%2d)\t task(%2d)(%2d)\t      %2d\t     %2d\t\t    %2d\t\t   %2d\n",
+                                fprintf(Output_fp, "%2d\tCompletion\t task(%2d)(%2d)\t task(%2d)(%2d)\t      %2d\t     %2d\t\t    %2d\n",
                                     OSTimeGet(),
                                     OSTCBCur->OSTCBId, OSTCBCur->OSTCBExtPtr->TaskNumber,
                                     OSTCBHighRdy->OSTCBId, OSTCBHighRdy->OSTCBExtPtr->TaskNumber,
                                     OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time,
                                     OSTCBCur->OSTCBCtxSwCtr,
-                                    OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->start_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime,
-                                    OSTCBCur->OSTCBDly);
+                                    OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->start_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime
+                                );
                                 fclose(Output_fp);
                             }
                         }
                         else {
-                            printf("%2d\tCompletion\t task(%2d)(%2d)\t task(%2d)\t      %2d\t     %2d\t\t    %2d\t\t   %2d\n",
+                            printf("%2d\tCompletion\t task(%2d)(%2d)\t task(%2d)\t      %2d\t     %2d\t\t    %2d\n",
                                 OSTimeGet(),
                                 OSTCBCur->OSTCBId, OSTCBCur->OSTCBExtPtr->TaskNumber,
                                 OSTCBHighRdy->OSTCBPrio,
                                 OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time,
                                 OSTCBCur->OSTCBCtxSwCtr,
-                                OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->start_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime,
-                                OSTCBCur->OSTCBDly
+                                OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->start_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime
                             );
                             if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0)
                             {
-                                fprintf(Output_fp, "%2d\tCompletion\t task(%2d)(%2d)\t task(%2d)\t      %2d\t     %2d\t\t    %2d\t\t   %2d\n",
+                                fprintf(Output_fp, "%2d\tCompletion\t task(%2d)(%2d)\t task(%2d)\t      %2d\t     %2d\t\t    %2d\n",
                                     OSTimeGet(),
                                     OSTCBCur->OSTCBId, OSTCBCur->OSTCBExtPtr->TaskNumber,
                                     OSTCBHighRdy->OSTCBPrio,
                                     OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->arrive_time,
                                     OSTCBCur->OSTCBCtxSwCtr,
-                                    OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->start_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime,
-                                    OSTCBCur->OSTCBDly);
+                                    OSTCBCur->OSTCBExtPtr->completion_time - OSTCBCur->OSTCBExtPtr->start_time - OSTCBCur->OSTCBExtPtr->TaskExecutionTime);
                                 fclose(Output_fp);
                             }
                         }
@@ -1257,7 +1254,7 @@ void  OSTimeTick (void)
                 printf("%2d\tMissDeadline\t task(%2d)(%2d)\t -------------------\n", OSTimeGet(), ptcb ->OSTCBId, ptcb->OSTCBExtPtr->TaskNumber);
                 if ((Output_err = fopen_s(&Output_fp, "./Output.txt", "a")) == 0)
                 {
-                    fprintf(Output_fp, "%2d\tMissDeadline\t task(%2d)(%2d)\t -------------------\n", OSTimeGet(), ptcb->OSTCBId, ptcb->OSTCBExtPtr->TaskNumber);
+                    fprintf(Output_fp, "%2d\tMissDeadline\t task(%2d)(%2d)\t ------------\n", OSTimeGet(), ptcb->OSTCBId, ptcb->OSTCBExtPtr->TaskNumber);
                     fclose(Output_fp);
                 }
                 exit(0);
