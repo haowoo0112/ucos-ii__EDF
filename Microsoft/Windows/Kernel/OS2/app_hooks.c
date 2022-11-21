@@ -149,26 +149,6 @@ void InputFile() {
         j++;
     }
 
-    //sort
-    int count = 0, min = 99, min_index;
-    int* period;
-    period = malloc(TASK_NUMBER * sizeof(int));
-    for (i = 0; i < TASK_NUMBER; i++) {
-        period[i] = TaskParameter[i].TaskPeriodic;
-    }
-
-    for (j = 0; j < TASK_NUMBER;j++) {
-        min = 99;
-        for (i = 0; i < TASK_NUMBER; i++) {
-            if (period[i] < min) {
-                min = period[i];
-                min_index = i;
-            }
-        }
-        TaskParameter[min_index].TaskPriority = j;
-        period[min_index] = 99;
-    }
-
     fclose(fp);
     /*read file*/
 }
