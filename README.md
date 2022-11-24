@@ -13,10 +13,18 @@ Earliest deadline first (EDF) is an optimal dynamic priority scheduling algorith
 ## Result
 
 - Task input file (ucos-ii__EDF\Microsoft\Windows\Kernel\OS2\VS\TaskSet.txt)
+
 ![](https://i.imgur.com/dSjgGP5.png)
 
+format- periodic task
+|Task ID|Arrive Time|Execution Time|Task Periodic
+|-|-|-|-
+|##|##|##|##
+
 - Scheduling diagram
+
 ![](https://i.imgur.com/3Jd77jB.png)
 
 - Final result
+
 ![](https://i.imgur.com/pGIHCgB.png)
